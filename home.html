@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kerala Farming Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f9f0;
+            color: #2c3e50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        header {
+            background: linear-gradient(to right, #27ae60, #f1c40f);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+        .logo-img {
+            width: 60px;          /* adjust size */
+            height: 60px;
+            margin-right: 12px;
+            object-fit: contain;  /* keeps proportions */
+        }
+
+
+        h1 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f1f8e9;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 15px;
+            text-align: center;
+            flex: 1;
+            min-width: 100px;
+            font-weight: 600;
+            color: #7d8c70;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background: #e4f1d4;
+        }
+        
+        .tab.active {
+            color: #27ae60;
+            border-bottom: 3px solid #f1c40f;
+        }
+        
+        .tab i {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .screen {
+            padding: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        h2 {
+            color: #27ae60;
+            margin-bottom: 15px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        h2 i {
+            margin-right: 10px;
+            color: #f1c40f;
+        }
+        
+        .card {
+            background: #f8fbf3;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #27ae60;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .card-yellow {
+            border-left-color: #f1c40f;
+        }
+        
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .card p {
+            color: #546e7a;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        select:focus, input:focus {
+            border-color: #27ae60;
+            outline: none;
+        }
+        
+        button {
+            background: linear-gradient(to right, #27ae60, #f1c40f);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .voice-btn {
+            background: #2c3e50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .voice-btn i {
+            margin-right: 10px;
+        }
+        
+        .risk-meter {
+            height: 20px;
+            background: #eee;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .risk-level {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(to right, #27ae60, #f1c40f, #e74c3c);
+            transition: width 1s ease;
+        }
+        
+        .profit-calc {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+        
+        .profit-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .profit-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #27ae60;
+        }
+        
+        .profit-label {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        .negative {
+            color: #e74c3c;
+        }
+        
+        .language-switch {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        .lang-btn {
+            padding: 8px 15px;
+            background: #eaf6eb;
+            border: none;
+            border-radius: 15px;
+            margin: 0 5px;
+            font-size: 14px;
+            color: #27ae60;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn.active {
+            background: #27ae60;
+            color: white;
+        }
+        
+        footer {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        
+        /* Logo styling */
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #27ae60 0%, #f1c40f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="6e2923a64f530cd4e8e63f25bd8abbc3e01fd35e22183abdbdb7c10ec17ca6a7.png" 
+                alt="KrishiSampada Logo" class="logo-img">
+                 <h1>Kerala Farming Assistant</h1>
+            </div>
+
+            <p>AI-powered guidance in Malayalam & English</p>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="showScreen(0)">
+                <i class="fas fa-tint"></i>
+                <span>Inputs</span>
+            </div>
+            <div class="tab" onclick="showScreen(1)">
+                <i class="fas fa-lightbulb"></i>
+                <span>Advice</span>
+            </div>
+            <div class="tab" onclick="showScreen(2)">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Market</span>
+            </div>
+            <div class="tab" onclick="showScreen(3)">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Risks</span>
+            </div>
+            <div class="tab" onclick="showScreen(4)">
+                <i class="fas fa-rupee-sign"></i>
+                <span>Profit</span>
+            </div>
+        </div>
+        
+        <!-- Input Screen -->
+        <div class="screen active">
+            <h2><i class="fas fa-tint"></i> Farm Inputs</h2>
+            
+            <div class="input-group">
+                <label for="crop-type">Crop Type</label>
+                <select id="crop-type">
+                    <option>Rice</option>
+                    <option>Coconut</option>
+                    <option>Rubber</option>
+                    <option>Banana</option>
+                    <option>Spices</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                 <label for="soil-type"></label>
+                <!-- <select id="soil-type">
+                    <option>Laterite Soil</option>
+                    <option>Alluvial Soil</option>
+                    <option>Red Soil</option>
+                    <option>Black Soil</option>
+                </select> -->
+            </div>
+            
+            <div class="input-group">
+                <label for="land-size">Land Size (acres)</label>
+                <input type="number" id="land-size" value="1">
+            </div>
+            
+            <div class="input-group">
+                <label for="location">Location</label>
+                <select id="location">
+                    <option>Thiruvananthapuram</option>
+                    <option>Kollam</option>
+                    <option>Alappuzha</option>
+                    <option>Kottayam</option>
+                    <option>Idukki</option>
+                </select>
+            </div>
+            
+            <button>Get Recommendations <i class="fas fa-arrow-right"></i></button>
+            <button class="voice-btn"><i class="fas fa-microphone"></i> Voice Input</button>
+            
+            <div class="language-switch">
+                <button class="lang-btn active">Malayalam</button>
+                <button class="lang-btn">English</button>
+            </div>
+        </div>
+        
+        <!-- Recommendation Screen -->
+        <div class="screen">
+            <h2><i class="fas fa-lightbulb"></i> Crop Advice</h2>
+            
+            <div class="card">
+                <h3>Best Crops for Your Land</h3>
+                <p>Based on your soil and location, we recommend:</p>
+                <p>→ Rice varieties: Jyothi & Uma</p>
+                <p>→ Coconut: Malayan Green Dwarf</p>
+            </div>
+            
+            <div class="card card-yellow">
+                <h3>Fertilizer Advice</h3>
+                <p>Soil test shows you need:</p>
+                <p>→ Nitrogen: 50 kg/acre</p>
+                <p>→ Phosphorus: 25 kg/acre</p>
+                <p>→ Organic compost: 100 kg/acre</p>
+            </div>
+            
+            <div class="card">
+                <h3>Water Management</h3>
+                <p>Your area will receive good rainfall next week. No need for extra irrigation now.</p>
+            </div>
+            
+            <button onclick="showScreen(2)">View Market Prices <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <!-- Market Screen -->
+        <div class="screen">
+            <h2><i class="fas fa-shopping-cart"></i> Market Prices</h2>
+            
+            <div class="card">
+                <h3>Current Prices (₹/kg)</h3>
+                <p>Rice: ₹32 - ₹38</p>
+                <p>Coconut: ₹25 - ₹30</p>
+                <p>Rubber: ₹150 - ₹170</p>
+                <p>Banana: ₹18 - ₹25</p>
+            </div>
+            
+            <div class="card card-yellow">
+                <h3>Best Selling Places</h3>
+                <p>→ Kollam Market: Good prices for rice</p>
+                <p→ Alappuzha Cooperative: Best for coconut</p>
+            </div>
+            
+            <div class="card">
+                <h3>Government Schemes</h3>
+                <p>You're eligible for: </p>
+                <p>→ Subsidized seeds scheme</p>
+                <p>→ Organic farming incentive</p>
+            </div>
+            
+            <button>Check Risk Factors <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <!-- Risks Screen -->
+        <div class="screen">
+            <h2><i class="fas fa-exclamation-triangle"></i> Risk Assessment</h2>
+            
+            <div class="card">
+                <h3>Weather Alert</h3>
+                <p>Heavy rain expected next week. Harvest before Thursday.</p>
+            </div>
+            
+            <div class="card card-yellow">
+                <h3>Pest Risk</h3>
+                <p>Medium risk of brown plant hopper. Monitor your field.</p>
+                <div class="risk-meter">
+                    <div class="risk-level" style="width: 60%"></div>
+                </div>
+                <p>Prevention: Use neem oil spray</p>
+            </div>
+            
+            <div class="card">
+                <h3>Disease Alert</h3>
+                <p>Low risk of blast disease in your area.</p>
+                <div class="risk-meter">
+                    <div class="risk-level" style="width: 20%"></div>
+                </div>
+            </div>
+            
+            <button>Calculate Profit <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <!-- Profit Screen -->
+        <div class="screen">
+            <h2><i class="fas fa-rupee-sign"></i> Profit Estimate</h2>
+            
+            <div class="card">
+                <h3>Rice Cultivation (1 acre)</h3>
+                
+                <div class="profit-calc">
+                    <div class="profit-item">
+                        <div class="profit-value">₹42,000</div>
+                        <div class="profit-label">Expected Income</div>
+                    </div>
+                    <div class="profit-item">
+                        <div class="profit-value">₹28,500</div>
+                        <div class="profit-label">Total Cost</div>
+                    </div>
+                    <div class="profit-item">
+                        <div class="profit-value">₹13,500</div>
+                        <div class="profit-label">Net Profit</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card card-yellow">
+                <h3>Cost Breakdown</h3>
+                <p>Seeds: ₹2,500</p>
+                <p>Fertilizers: ₹5,000</p>
+                <p>Labor: ₹15,000</p>
+                <p>Other: ₹6,000</p>
+            </div>
+            
+            <div class="card">
+                <h3>Tips to Increase Profit</h3>
+                <p>→ Use organic practices for premium prices</p>
+                <p>→ Sell directly to cooperative society</p>
+                <p>→ Apply for government subsidies</p>
+            </div>
+            
+            <button>Start Again <i class="fas fa-redo"></i></button>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Smart India Hackathon 2025 | AI-powered Personal Farming Assistant</p>
+        <p>Integrated with Soil Health Card, Agmarknet, and Government Schemes</p>
+    </footer>
+
+    <script>
+        function showScreen(index) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Show selected screen
+            document.querySelectorAll('.screen')[index].classList.add('active');
+            
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab')[index].classList.add('active');
+        }
+        
+        // Add some interactive effects
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
